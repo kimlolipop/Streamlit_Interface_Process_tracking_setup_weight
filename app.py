@@ -1,8 +1,10 @@
 import streamlit as st
+import pandas as pd
 from input_production import webcam_input, video_input_img_sub, video_input_color_mask
 from croper import crop, preview_img_subtraction, preview_color_mask
 from save_image import save_img
 from adjust_color_mask import adjust_color, Render_Color_mask
+from create_dataframe import create_df
 import time
  # Sleep for 3 seconds
 
@@ -12,6 +14,9 @@ import time
 if 'current_time' not in st.session_state: # status upload or not
     st.session_state.current_time = 0
 
+if 'threshold_max_min' not in st.session_state: # status upload or not
+    st.session_state.threshold_max_min = []
+    
 if 'c_upload' not in st.session_state: # status upload or not
     st.session_state.c_upload = False
     
@@ -121,12 +126,14 @@ if mode == 'Video':
                     Preview_button_subtraction = st.button('Preview Subtraction')
                     if Preview_button_subtraction:
                         HIDE_button = st.button('HIDE')
-                        preview_img_subtraction(coordinate, 
+                        st.session_state.threshold_max_min = preview_img_subtraction(coordinate, 
                                                 st.session_state.video_raw, 
                                                 st.session_state.video_subtrack, 
                                                 HIDE_button, 
                                                 method)
-                    
+                        
+                        st.write(st.session_state.threshold_max_min)
+                        create_df(method, coordinate, st.session_state.threshold_max_min)
                     
                     if st.session_state.select_frame_crop == 1:
                             clear_button = st.button('Clear_subtrack')
@@ -221,12 +228,15 @@ if mode == 'Video':
                         Preview_button_color_mask = st.button('Preview Mask')
                         if Preview_button_color_mask:
                             HIDE_button = st.button('HIDE')
-                            preview_color_mask(coordinate, 
+                            st.session_state.threshold_max_min = preview_color_mask(coordinate, 
                                     st.session_state.video_raw2, 
                                     lower_color, 
                                     upper_color, 
                                     HIDE_button, 
                                     method)
+                            st.write(st.session_state.threshold_max_min)
+                            create_df(method, coordinate, st.session_state.threshold_max_min, lower_color, upper_color)
+                            
                         
                         
                         if st.session_state.select_frame_crop == 1:
@@ -239,5 +249,21 @@ if mode == 'Video':
     
     elif method == 'All Methods':
         st.write('all method')
+        
+elif mode == 'test':
+    import pandas as pd
+    import base64
+    
+    download = st.button('download')
+    if download:
+        'Download Started!'
+        liste = [['A','B','C']]
+        df_download = pd.DataFrame()
+        df_download['A'] = liste
+
+        csv = df_download.to_csv(index=False)
+        b64 = base64.b64encode(csv.encode()).decode()  # some strings
+        linko= f'<a href="data:file/csv;base64,{b64}" download="Parameter.csv">Download csv file</a>'
+        st.markdown(linko, unsafe_allow_html=True)
 else:
     webcam_input()

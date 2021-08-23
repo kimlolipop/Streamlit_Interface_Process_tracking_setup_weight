@@ -4,6 +4,9 @@ from PIL import Image
 import cv2
 import numpy as np
 import time
+from sklearn.cluster import KMeans
+import statistics
+import pandas as pd
 
 def crop(status):
     if status == 1:
@@ -45,6 +48,7 @@ def crop(status):
 def preview_img_subtraction(coordinate, raw_frame, mask_frame, 
                             HIDE_button, method):
     
+    value_frame = []
     x = round(coordinate[0])
     y = round(coordinate[1])
 
@@ -67,6 +71,8 @@ def preview_img_subtraction(coordinate, raw_frame, mask_frame,
 
         img_crop = img[y:y+h, x:x+w]
         mask_crop = mask[y:y+h, x:x+w]
+        
+        value_frame.append(np.sum(mask_crop))
 
 
         #visulize
@@ -74,13 +80,17 @@ def preview_img_subtraction(coordinate, raw_frame, mask_frame,
         stframe1.image(img_crop)
         stframe2.image(mask_crop)
         time.sleep(0.05)
-        
+    
+    min_v, max_v = k_cluster(value_frame)
+    
+    return [min_v, max_v]
         
             
 def preview_color_mask(coordinate, raw_frame, lower_color, upper_color, 
                        HIDE_button, method):
     
-
+    value_frame = []
+    
     x = round(coordinate[0])
     y = round(coordinate[1])
 
@@ -105,6 +115,8 @@ def preview_color_mask(coordinate, raw_frame, lower_color, upper_color,
         img = raw_frame[i]
         img_crop = img[y:y+h, x:x+w]
         mask_crop = mask[y:y+h, x:x+w]
+        
+        value_frame.append(np.sum(mask_crop))
 
 
         #visulize
@@ -112,6 +124,35 @@ def preview_color_mask(coordinate, raw_frame, lower_color, upper_color,
         stframe1.image(img_crop)
         stframe2.image(mask_crop)
         time.sleep(0.05)
+    
+    min_v, max_v = k_cluster(value_frame)
+    
+    return [min_v, max_v]
 
+
+
+        
+def k_cluster(value_frame):
+    df = pd.DataFrame()
+    df['dummy'] = value_frame
+    df['fg1'] = value_frame
+    df = df[10:]
     
+    kmeans = KMeans(n_clusters=2, random_state=0).fit(np.array(df))
+    df['fg_cls'] = kmeans.labels_
+    cls0 = df[df['fg_cls'] == 0]
+    cls1 = df[df['fg_cls'] == 1]
     
+    min_cls0 = min(cls0['fg1'])
+    min_cls1 = min(cls1['fg1'])
+    
+    if min_cls0 < min_cls1:
+        focus_df = cls1
+    else:
+        focus_df = cls0
+        
+    min_v = min(focus_df['fg1']) *1.5
+    max_v = statistics.mean(focus_df['fg1']) *1.5
+        
+
+    return min_v, max_v
