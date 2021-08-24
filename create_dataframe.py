@@ -1,8 +1,9 @@
 import pandas as pd
 import base64
 import streamlit as st
+import numpy as np
 
-def create_df(method, coordinate, threshold, lower = -1, upper = -1, state = 1):
+def create_df(method, coordinate, threshold, lower = np.array([-1]), upper = np.array([-1]), state = 1):
     df = pd.DataFrame()
     st.write(method)
     df['method'] = [method]
