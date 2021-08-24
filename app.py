@@ -62,6 +62,7 @@ if mode == 'Video':
     # Video sybtraction=====================================================================
     if method == 'Video Subtraction':
         f = st.file_uploader("Video Subtraction")
+        state_input = st.text_input("Input state", 1)
         # Read Video   
         if st.session_state.c_upload == False:
             video = st.session_state.video_subtrack
@@ -133,7 +134,9 @@ if mode == 'Video':
                                                 method)
                         
                         st.write(st.session_state.threshold_max_min)
-                        create_df(method, coordinate, st.session_state.threshold_max_min)
+#                         state_input = st.text_input("Input state", 1)
+                        
+                        create_df(method, coordinate, st.session_state.threshold_max_min, state_input)
                     
                     if st.session_state.select_frame_crop == 1:
                             clear_button = st.button('Clear_subtrack')
@@ -147,6 +150,7 @@ if mode == 'Video':
     # Color Mask ================================================================================
     elif method == 'Color Mask':
         f = st.file_uploader("Color Mask")
+        state_input = st.text_input("Input state", 1)
         st.write('Color mask')
         # Read Video   
         if st.session_state.c_upload == False:
@@ -235,7 +239,8 @@ if mode == 'Video':
                                     HIDE_button, 
                                     method)
                             st.write(st.session_state.threshold_max_min)
-                            create_df(method, coordinate, st.session_state.threshold_max_min, lower_color, upper_color)
+                            
+                            create_df(method, coordinate, st.session_state.threshold_max_min, state_input, lower_color, upper_color, state_input)
                             
                         
                         
@@ -251,19 +256,23 @@ if mode == 'Video':
         st.write('all method')
         
 elif mode == 'test':
-    import pandas as pd
-    import base64
+#     default_value_goes_here = 0
+    user_input = st.text_input("label goes here", 0)
     
-    download = st.button('download')
-    if download:
-        'Download Started!'
-        liste = [['A','B','C']]
-        df_download = pd.DataFrame()
-        df_download['A'] = liste
+    st.write(user_input)
+#     import pandas as pd
+#     import base64
+    
+#     download = st.button('download')
+#     if download:
+#         'Download Started!'
+#         liste = [['A','B','C']]
+#         df_download = pd.DataFrame()
+#         df_download['A'] = liste
 
-        csv = df_download.to_csv(index=False)
-        b64 = base64.b64encode(csv.encode()).decode()  # some strings
-        linko= f'<a href="data:file/csv;base64,{b64}" download="Parameter.csv">Download csv file</a>'
-        st.markdown(linko, unsafe_allow_html=True)
+#         csv = df_download.to_csv(index=False)
+#         b64 = base64.b64encode(csv.encode()).decode()  # some strings
+#         linko= f'<a href="data:file/csv;base64,{b64}" download="Parameter.csv">Download csv file</a>'
+#         st.markdown(linko, unsafe_allow_html=True)
 else:
     webcam_input()

@@ -151,7 +151,7 @@ def k_cluster(value_frame):
     else:
         focus_df = cls0
         
-    min_v = min(focus_df['fg1']) *1.5
+    min_v = min(focus_df['fg1']) * 1
     max_v = statistics.mean(focus_df['fg1']) *1.5
         
 

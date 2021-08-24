@@ -3,14 +3,14 @@ import base64
 import streamlit as st
 import numpy as np
 
-def create_df(method, coordinate, threshold, lower = np.array([-1]), upper = np.array([-1]), state = 1):
+def create_df(method, coordinate, threshold, state_input, lower = np.array([-1]), upper = np.array([-1])):
     df = pd.DataFrame()
     st.write(method)
     df['method'] = [method]
     df['coordinate'] = [coordinate]
     df['threshold'] = [threshold]
     
-    df['state'] = [state]
+    df['state'] = [state_input]
     df['lower'] = [lower.tolist()]
     df['upper'] = [upper.tolist()]
     
