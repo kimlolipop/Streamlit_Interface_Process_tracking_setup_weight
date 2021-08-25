@@ -9,7 +9,7 @@ import time
  # Sleep for 3 seconds
 
 
-#=================State setup
+#=================State setup======================================================
 # c_upload --> edit เพื่อให้สามารถ ทำงานหลาย ๆ ฟังก์ชั่น รวมถึงให้สามารถ อัพวิดีโอใหม่ได้
 if 'current_time' not in st.session_state: # status upload or not
     st.session_state.current_time = 0
@@ -40,7 +40,7 @@ if 'select_frame_crop' not in st.session_state: # create state name --> cnt
     
 if 'select_frame_color_mask' not in st.session_state: # create state name --> cnt
     st.session_state.select_frame_color_mask = 0
-#===========================
+#=======================================================================================
 
 coordinate = 0
 raw = []
@@ -55,14 +55,14 @@ mode = st.sidebar.radio('Go To ->', options=['Video', 'Webcam', 'test'])
 if mode == 'Video':
     
     
-    method = st.radio('Method ->', options=['Video Subtraction', 'Color Mask', 'All Methods'])
+    method = st.radio('Method ->', options=['Video Subtraction', 'Color Space', 'All Methods'])
 #     f = st.file_uploader("")
     
     
     # Video sybtraction=====================================================================
     if method == 'Video Subtraction':
         f = st.file_uploader("Video Subtraction")
-        state_input = st.text_input("Input state", 1)
+        
         # Read Video   
         if st.session_state.c_upload == False:
             video = st.session_state.video_subtrack
@@ -77,7 +77,7 @@ if mode == 'Video':
         # Render Video and Action    
         if f is not None:
 
-
+            state_input = st.text_input("Input state", 1)
             if len(st.session_state.video_subtrack) > 0:
                 # slide bar
                 values = st.slider( 'Select a range of values',0, int(st.session_state.no_frame) - 1, 1)
@@ -147,11 +147,11 @@ if mode == 'Video':
     # End Video subtraction
     
     
-    # Color Mask ================================================================================
-    elif method == 'Color Mask':
-        f = st.file_uploader("Color Mask")
-        state_input = st.text_input("Input state", 1)
-        st.write('Color mask')
+    # Color Space ================================================================================
+    elif method == 'Color Space':
+        f = st.file_uploader("Color Space")
+        
+        st.write('Color Space')
         # Read Video   
         if st.session_state.c_upload == False:
             video = st.session_state.video_raw2
@@ -166,7 +166,7 @@ if mode == 'Video':
         # Render Video and Action    
         if f is not None:
 
-
+            state_input = st.text_input("Input state", 1)
             if len(st.session_state.video_raw2) > 0:
                 # slide bar
                 values = st.slider( 'Select a range of values',0, int(st.session_state.no_frame) - 1, 1)
@@ -200,7 +200,7 @@ if mode == 'Video':
                 st.write(st.session_state.current_time)
 
 
-                # Adjust Color Mask
+                # Adjust Color Space
                 select_button_color_mask = st.button('Adjsut')
                 if select_button_color_mask:
                     st.session_state.select_frame_color_mask = 1
@@ -240,7 +240,7 @@ if mode == 'Video':
                                     method)
                             st.write(st.session_state.threshold_max_min)
                             
-                            create_df(method, coordinate, st.session_state.threshold_max_min, state_input, lower_color, upper_color, state_input)
+                            create_df(method, coordinate, st.session_state.threshold_max_min, state_input, lower_color, upper_color)
                             
                         
                         
