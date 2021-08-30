@@ -96,15 +96,15 @@ def video_input_img_sub(c_upload, f):
 
         # Get the frames per second
         fps = cap.get(cv2.CAP_PROP_FPS)
-        st.write('FPS: ', fps)
+#         st.write('FPS: ', fps)
 
         # Get the total numer of frames in the video. value same as image frame
         frame_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-        st.write('Frame-count: ', frame_count)
+#         st.write('Frame-count: ', frame_count)
 
         #Time of video(sec)
         duration = frame_count / fps
-        st.write('Duration: ', duration)
+#         st.write('Duration: ', duration)
 
         # sent to read
         video, no_frame, raw = imgae_subtraction(cap, video)

@@ -48,15 +48,16 @@ lower_color, upper_color = 0, 0
 c_upload = False
 st.title("Indezy - Adjust Weight program")
 st.sidebar.title('Navigation')
-mode = st.sidebar.radio('Go To ->', options=['Video', 'Webcam', 'test'])
+# mode = st.sidebar.radio('Go To ->', options=['Video', 'Webcam', 'test'])
+mode = st.sidebar.radio('', options=['Video'])
 # st.sidebar.header('Options')
 # s
 
 if mode == 'Video':
     
     
-    method = st.radio('Method ->', options=['Video Subtraction', 'Color Space', 'All Methods'])
-#     f = st.file_uploader("")
+#     method = st.radio('Method ->', options=['Video Subtraction', 'Color Space', 'All Methods'])
+    method = st.radio('', options=['Video Subtraction', 'Color Space'])
     
     
     # Video sybtraction=====================================================================
@@ -76,8 +77,8 @@ if mode == 'Video':
 
         # Render Video and Action    
         if f is not None:
-
-            state_input = st.text_input("Input state", 1)
+            st.title("Input state")
+            state_input = st.text_input("", 1)
             if len(st.session_state.video_subtrack) > 0:
                 # slide bar
                 values = st.slider( 'Select a range of values',0, int(st.session_state.no_frame) - 1, 1)
@@ -112,7 +113,7 @@ if mode == 'Video':
                     stframe1.image(st.session_state.video_subtrack[values])
                     stframe2.image(st.session_state.video_raw[values])
                 
-                st.write(st.session_state.current_time)
+#                 st.write(st.session_state.current_time)
 
                 # Select frame
                 select_button = st.button('Select_subtrack')
@@ -124,7 +125,7 @@ if mode == 'Video':
                 if st.session_state.select_frame_crop == 1:
                     st.session_state.select_frame_crop, coordinate = crop(st.session_state.select_frame_crop)
                     
-                    Preview_button_subtraction = st.button('Preview Subtraction')
+                    Preview_button_subtraction = st.button('Render Parameter Subtraction')
                     if Preview_button_subtraction:
                         HIDE_button = st.button('HIDE')
                         st.session_state.threshold_max_min = preview_img_subtraction(coordinate, 
@@ -197,7 +198,7 @@ if mode == 'Video':
                     # Visualize frame
                     stframe1.image(st.session_state.video_raw2[values])
                 
-                st.write(st.session_state.current_time)
+#                 st.write(st.session_state.current_time)
 
 
                 # Adjust Color Space
@@ -229,7 +230,7 @@ if mode == 'Video':
                     if st.session_state.select_frame_crop == 1:
                         st.session_state.select_frame_crop, coordinate = crop(st.session_state.select_frame_crop)
             
-                        Preview_button_color_mask = st.button('Preview Mask')
+                        Preview_button_color_mask = st.button('Render Parameter Subtraction')
                         if Preview_button_color_mask:
                             HIDE_button = st.button('HIDE')
                             st.session_state.threshold_max_min = preview_color_mask(coordinate, 
@@ -238,7 +239,7 @@ if mode == 'Video':
                                     upper_color, 
                                     HIDE_button, 
                                     method)
-                            st.write(st.session_state.threshold_max_min)
+#                             st.write(st.session_state.threshold_max_min)
                             
                             create_df(method, coordinate, st.session_state.threshold_max_min, state_input, lower_color, upper_color)
                             

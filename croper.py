@@ -31,8 +31,8 @@ def crop(status):
                                                              realtime_update=realtime_update,
                                                              box_color=box_color,
                                                              aspect_ratio=aspect_ratio)
-        st.write(coordinate)
-        st.write(ratio1, ratio2)
+#         st.write(coordinate)
+#         st.write(ratio1, ratio2)
 
 
         # Manipulate cropped image at will
